@@ -3,28 +3,23 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-const int window_width = 800;
-const int window_height = 600;
-
+int window_width = 800;
+int window_height = 600;
 bool is_running = NULL;
+
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
-// Declare a pointer to an array of uint32 elements.
-uint32_t *colour_buffer = NULL;
 SDL_Texture *colour_buffer_texture = NULL;
 
+// Declare a pointer to an array of uint32 elements.
+uint32_t *colour_buffer = NULL;
+
 bool init_window(void);
-
 void setup(void);
-
 void clear_colour_buffer(uint32_t colour);
-
 void process_input(void);
-
 void update(void);
-
 void render(void);
-
 void cleanup(void);
 
 int main(void) {
@@ -48,6 +43,12 @@ bool init_window(void) {
         fprintf(stderr, "An error occurred: %s\n", SDL_GetError());
         return false;
     }
+
+    // Set width and height to full screen resolution.
+    SDL_DisplayMode display_mode;
+    SDL_GetCurrentDisplayMode(0, &display_mode);
+    window_width = display_mode.w;
+    window_height = display_mode.h;
 
     // Create SDL window.
     window = SDL_CreateWindow(
@@ -127,8 +128,18 @@ void render(void) {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    clear_colour_buffer(0xFFFFFF00);
     render_colour_buffer();
+    clear_colour_buffer(0xFFFFFF00);
+
+    int grid_size = 50;
+    uint32_t grid_colour = 0x00000000;
+    for (int y = 0; y < window_height; y++) {
+        for (int x = 0; x < window_width; x++) {
+            if (y % grid_size == 0 || x % grid_size == 0) {
+                colour_buffer[(window_width * y) + x] = grid_colour;
+            }
+        }
+    }
 
     SDL_RenderPresent(renderer);
 }
