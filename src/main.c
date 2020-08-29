@@ -5,6 +5,7 @@
 
 const uint32_t BLACK = 0xFF000000;
 const uint32_t DARK_GREY = 0xFF333333;
+const uint32_t PINK = 0xFFFF69B4;
 
 int window_width = 800;
 int window_height = 600;
@@ -18,19 +19,13 @@ SDL_Texture *colour_buffer_texture = NULL;
 uint32_t *colour_buffer = NULL;
 
 bool init_window(void);
-
 void setup(void);
-
 void clear_colour_buffer(uint32_t colour);
-
 void draw_grid(void);
-
+void draw_fill_rect(int x, int y, int width, int height, uint32_t colour);
 void process_input(void);
-
 void update(void);
-
 void render(void);
-
 void cleanup(void);
 
 int main(void) {
@@ -58,8 +53,8 @@ bool init_window(void) {
 	// Set width and height to full screen resolution.
 	SDL_DisplayMode display_mode;
 	SDL_GetCurrentDisplayMode(0, &display_mode);
-	window_width = display_mode.w;
-	window_height = display_mode.h;
+//	window_width = display_mode.w;
+//	window_height = display_mode.h;
 
 	// Create SDL window.
 	window = SDL_CreateWindow(
@@ -124,6 +119,17 @@ void draw_grid(void) {
 	}
 }
 
+void draw_fill_rect(int x, int y, int width, int height, uint32_t colour) {
+	int scale = 0;
+	int area = width * height;
+	for (int i = 0; i < area; i++) {
+		if (i > 0 && i % width == 0) {
+			scale += window_width - width;
+		}
+		colour_buffer[(window_width * y) + i + x + scale] = colour;
+	}
+}
+
 void process_input(void) {
 	SDL_Event event;
 	SDL_PollEvent(&event);
@@ -150,6 +156,7 @@ void render(void) {
 	SDL_RenderClear(renderer);
 
 	draw_grid();
+	draw_fill_rect(100, 100, 250, 100, PINK);
 
 	render_colour_buffer();
 	clear_colour_buffer(BLACK);
