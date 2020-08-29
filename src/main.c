@@ -17,6 +17,7 @@ uint32_t *colour_buffer = NULL;
 bool init_window(void);
 void setup(void);
 void clear_colour_buffer(uint32_t colour);
+void draw_grid(void);
 void process_input(void);
 void update(void);
 void render(void);
@@ -103,6 +104,18 @@ void render_colour_buffer(void) {
     SDL_RenderCopy(renderer, colour_buffer_texture, NULL, NULL);
 }
 
+void draw_grid(void) {
+    int grid_size = 10;
+    uint32_t grid_colour = 0x00000000;
+    for (int y = 0; y < window_height; y++) {
+        for (int x = 0; x < window_width; x++) {
+            if (y % grid_size == 0 || x % grid_size == 0) {
+                colour_buffer[(window_width * y) + x] = grid_colour;
+            }
+        }
+    }
+}
+
 void process_input(void) {
     SDL_Event event;
     SDL_PollEvent(&event);
@@ -128,18 +141,10 @@ void render(void) {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    draw_grid();
+
     render_colour_buffer();
     clear_colour_buffer(0xFFFFFF00);
-
-    int grid_size = 50;
-    uint32_t grid_colour = 0x00000000;
-    for (int y = 0; y < window_height; y++) {
-        for (int x = 0; x < window_width; x++) {
-            if (y % grid_size == 0 || x % grid_size == 0) {
-                colour_buffer[(window_width * y) + x] = grid_colour;
-            }
-        }
-    }
 
     SDL_RenderPresent(renderer);
 }
