@@ -73,6 +73,7 @@ void render(void) {
 
 	draw_grid();
 	draw_fill_rect(100, 100, 250, 100, PINK);
+	draw_pixel(550, 550, PINK);
 
 	render_colour_buffer();
 	clear_colour_buffer(BLACK);

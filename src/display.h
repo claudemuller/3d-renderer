@@ -24,6 +24,8 @@ void clear_colour_buffer(uint32_t colour);
 
 void draw_grid(void);
 
+void draw_pixel(int x, int y, uint32_t colour);
+
 void draw_fill_rect(int x, int y, int width, int height, uint32_t colour);
 
 void cleanup(void);

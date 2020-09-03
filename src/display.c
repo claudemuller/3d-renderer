@@ -70,6 +70,12 @@ void draw_grid(void) {
 	}
 }
 
+void draw_pixel(int x, int y, uint32_t colour) {
+	if (x < window_width && y < window_height) {
+		colour_buffer[(window_width * y) + x] = colour;
+	}
+}
+
 void draw_fill_rect(int x, int y, int width, int height, uint32_t colour) {
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
