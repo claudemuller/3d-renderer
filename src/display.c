@@ -27,7 +27,7 @@ bool init_window(void) {
 			SDL_WINDOWPOS_CENTERED,
 			window_width,
 			window_height,
-			SDL_WINDOW_BORDERLESS
+			SDL_WINDOW_BORDERLESS | SDL_WINDOW_FULLSCREEN_DESKTOP
 	);
 	if (!window) {
 		fprintf(stderr, "An error occurred creating SDL window: %s\n", SDL_GetError());
@@ -71,7 +71,7 @@ void draw_grid(void) {
 }
 
 void draw_pixel(int x, int y, uint32_t colour) {
-	if (x < window_width && y < window_height) {
+	if (x > 0 && x < window_width && y > 0 && y < window_height) {
 		colour_buffer[(window_width * y) + x] = colour;
 	}
 }
@@ -81,7 +81,7 @@ void draw_fill_rect(int x, int y, int width, int height, uint32_t colour) {
 		for (int j = 0; j < height; j++) {
 			int current_x = x + i;
 			int current_y = y + j;
-			colour_buffer[(window_width * current_y) + current_x] = colour;
+			draw_pixel(current_x, current_y, colour);
 		}
 	}
 }
