@@ -63,8 +63,8 @@ void render_colour_buffer(void) {
 void draw_grid(void) {
 	int grid_size = 10;
 	uint32_t grid_colour = DARK_GREY;
-	for (int y = 0; y < window_height; y += 10) {
-		for (int x = 0; x < window_width; x += 10) {
+	for (int y = 0; y < window_height; y += grid_size) {
+		for (int x = 0; x < window_width; x += grid_size) {
 			colour_buffer[(window_width * y) + x] = grid_colour;
 		}
 	}
