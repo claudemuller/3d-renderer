@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include "constants.h"
 #include "display.h"
 #include "vector.h"
 
@@ -13,6 +14,7 @@ vec3_t camera_position = {0, 0, -5};
 vec3_t cube_rotation = {0, 0, 0};
 
 bool is_running = NULL;
+int last_frame_time = 0;
 
 void setup(void);
 
@@ -91,9 +93,26 @@ void process_input(void) {
 }
 
 void update(void) {
-	cube_rotation.x += 0.01;
-	cube_rotation.y += 0.01;
-	cube_rotation.z += 0.01;
+	int waited_for = SDL_GetTicks();
+	// Waste time/sleep until the frame target time is reached.
+	// While A hasn't passed B i.e. the time now hasn't passed the last frame + frame target time.
+	// naive implementation (doesn't yield to OS)
+	//while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
+
+	// Sleep the execution until the target time in milliseconds is reached.
+	int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - last_frame_time);
+	// Only call delay if processing is too fast in the current frame.
+	if (time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME) {
+		SDL_Delay(time_to_wait);
+	}
+	last_frame_time = SDL_GetTicks();
+//	printf("FPS: %d\n", last_frame_time - waited_for);
+	float delta_time = 1;//(float)(SDL_GetTicks() - last_frame_time) / 1000.0f;
+	printf("%f\n", delta_time);
+
+	cube_rotation.x += 0.01 * delta_time;
+	cube_rotation.y += 0.01 * delta_time;
+	cube_rotation.z += 0.01 * delta_time;
 
 	for (int i = 0; i < N_POINTS; i++) {
 		// Get point.
