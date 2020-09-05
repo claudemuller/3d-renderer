@@ -11,9 +11,7 @@ float bench2;
 uint32_t bench_c;
 
 void start_bench(int bench);
-
 void stop_bench(int bench);
-
 void print_bench(void);
 
 #endif //INC_3DRENDERER_BENCHMARK_H
