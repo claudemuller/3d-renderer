@@ -3,14 +3,17 @@
 #include <SDL2/SDL.h>
 #include "display.h"
 #include "vector.h"
+#include "mesh.h"
 
 //const int N_POINTS = 9 * 9 * 9;
-const int N_POINTS = 9 * 9 * 9;
-vec3_t cube_points[N_POINTS];
-vec2_t projected_points[N_POINTS];
+//const int N_POINTS = 9 * 9 * 9;
+//vec3_t cube_points[N_POINTS];
+//vec2_t projected_points[N_POINTS];
+
 int fov_factor = 640;
 vec3_t camera_position = {0, 0, -5};
 vec3_t cube_rotation = {0, 0, 0};
+triangle_t triangles_to_render[N_MESH_FACES];
 
 bool is_running = NULL;
 int last_frame_time = 0;
@@ -45,7 +48,7 @@ int main(void) {
 
 void setup(void) {
 	// Allocate the required bytes in memory for the colour buffer.
-	colour_buffer = (uint32_t *) malloc(sizeof(uint32_t) * window_width * window_height);
+	colour_buffer = (uint32_t*) malloc(sizeof(uint32_t) * window_width * window_height);
 
 	colour_buffer_texture = SDL_CreateTexture(
 			renderer,
@@ -55,21 +58,21 @@ void setup(void) {
 			window_height
 	);
 
-	int c = 0;
-	for (float x = -1; x <= 1; x += 0.25) {
-		for (float y = -1; y <= 1; y += 0.25) {
-			for (float z = -1; z <= 1; z += 0.25) {
-				vec3_t new_point = {x, y, z};
-				cube_points[c++] = new_point;
-			}
-		}
-	}
+//	int c = 0;
+//	for (float x = -1; x <= 1; x += 0.25) {
+//		for (float y = -1; y <= 1; y += 0.25) {
+//			for (float z = -1; z <= 1; z += 0.25) {
+//				vec3_t new_point = {x, y, z};
+//				cube_points[c++] = new_point;
+//			}
+//		}
+//	}
 }
 
 vec2_t project(vec3_t point) {
 	return (vec2_t) {
-		.x = fov_factor * point.x / point.z,
-		.y = fov_factor * point.y / point.z
+			.x = fov_factor * point.x / point.z,
+			.y = fov_factor * point.y / point.z
 	};
 }
 
@@ -100,7 +103,7 @@ void update(void) {
 		SDL_Delay(time_to_wait);
 	}
 //	printf("FPS: %d\n", last_frame_time - waited_for);
-	float delta_time = (float)(SDL_GetTicks() - last_frame_time) / 1000.0f;
+	float delta_time = (float) (SDL_GetTicks() - last_frame_time) / 1000.0f;
 	// Clamp deltaTime to a maximum value
 	delta_time = delta_time > 0.05f ? 0.05f : delta_time;
 	// Sets the new ticks fo the current frame to be used in the next pass
@@ -110,35 +113,79 @@ void update(void) {
 	cube_rotation.y += 0.5 * delta_time;
 	cube_rotation.z += 0.5 * delta_time;
 
-	for (int i = 0; i < N_POINTS; i++) {
-		// Get point.
-		vec3_t point = cube_points[i];
+//	for (int i = 0; i < N_POINTS; i++) {
+//		// Get point.
+//		vec3_t point = cube_points[i];
+//
+//		// Rotate point.
+//		vec3_t transformed_point = vec3_rotate_x(point, cube_rotation.x);
+//		transformed_point = vec3_rotate_y(transformed_point, cube_rotation.y);
+//		transformed_point = vec3_rotate_z(transformed_point, cube_rotation.z);
+//
+//		// Translate the points away from the camera.
+//		transformed_point.z -= camera_position.z;
+//
+//		// Create the projected point.
+//		vec2_t projected_point = project(transformed_point);
+//
+//		projected_points[i] = projected_point;
+//	}
 
-		// Rotate point.
-		vec3_t transformed_point = vec3_rotate_x(point, cube_rotation.x);
-		transformed_point = vec3_rotate_y(transformed_point, cube_rotation.y);
-		transformed_point = vec3_rotate_z(transformed_point, cube_rotation.z);
+	// Loop all mesh faces.
+	for (int i = 0; i < N_MESH_FACES; i++) {
+		face_t mesh_face = mesh_faces[i];
 
-		// Translate the points away from the camera.
-		transformed_point.z -= camera_position.z;
+		vec3_t face_vertices[3];
+		face_vertices[0] = mesh_vertices[mesh_face.a - 1];
+		face_vertices[1] = mesh_vertices[mesh_face.b - 1];
+		face_vertices[2] = mesh_vertices[mesh_face.c - 1];
 
-		// Create the projected point.
-		vec2_t projected_point = project(transformed_point);
+		triangle_t projected_triangle;
 
-		projected_points[i] = projected_point;
+		// Loop all three vertices of current face and apply transformation.
+		for (int j = 0; j < 3; j++) {
+			vec3_t transformed_vertex = face_vertices[j];
+
+			// Rotate.
+			transformed_vertex = vec3_rotate_x(transformed_vertex, cube_rotation.x);
+			transformed_vertex = vec3_rotate_y(transformed_vertex, cube_rotation.y);
+			transformed_vertex = vec3_rotate_z(transformed_vertex, cube_rotation.z);
+
+			// Translate the points away from the camera.
+			transformed_vertex.z -= camera_position.z;
+
+			// Create the projected point.
+			vec2_t projected_point = project(transformed_vertex);
+
+			// Scale and translate projected point to middle of screen.
+			projected_point.x += window_width / 2;
+			projected_point.y += window_height / 2;
+
+			projected_triangle.points[j] = projected_point;
+		}
+
+		triangles_to_render[i] = projected_triangle;
 	}
 }
 
 void render(void) {
 	draw_grid();
 
-	for (int i = 0; i < N_POINTS; i++) {
-		draw_fill_rect(
-				projected_points[i].x + window_width / 2,
-				projected_points[i].y + window_height / 2,
-				4,
-				4,
-				PINK);
+//	for (int i = 0; i < N_POINTS; i++) {
+//		draw_fill_rect(
+//				projected_points[i].x + window_width / 2,
+//				projected_points[i].y + window_height / 2,
+//				4,
+//				4,
+//				PINK);
+//	}
+
+	// Loop over projected triangles and render them.
+	for (int i = 0; i < N_MESH_FACES; i++) {
+		triangle_t triangle = triangles_to_render[i];
+		draw_fill_rect(triangle.points[0].x, triangle.points[0].y, 3, 3, PINK);
+		draw_fill_rect(triangle.points[1].x, triangle.points[1].y, 3, 3, PINK);
+		draw_fill_rect(triangle.points[2].x, triangle.points[2].y, 3, 3, PINK);
 	}
 
 	render_colour_buffer();
