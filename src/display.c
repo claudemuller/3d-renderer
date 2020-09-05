@@ -112,8 +112,7 @@ void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, colour_t colo
 	draw_line(x2, y2, x0, y0, colour);
 }
 
-void cleanup(void) {
-	free(colour_buffer);
+void destroy_sdl(void) {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

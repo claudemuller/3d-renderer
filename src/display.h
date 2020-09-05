@@ -27,6 +27,6 @@ void draw_pixel(int x, int y, colour_t colour);
 void draw_fill_rect(int x, int y, int width, int height, colour_t colour);
 void draw_line(int x0, int y0, int x1, int y1, colour_t colour);
 void draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2, colour_t colour);
-void cleanup(void);
+void destroy_sdl(void);
 
 #endif //INC_3DRENDERER_DISPLAY_H

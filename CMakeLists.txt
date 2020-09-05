@@ -5,7 +5,7 @@ set(SOURCE_FILES src/main.c
         src/display.c src/display.h
         src/colours.h src/colours.c
         src/benchmark.h src/benchmark.c
-        src/vector.c src/vector.h src/constants.h src/mesh.h src/mesh.c src/triangle.h src/triangle.c)
+        src/vector.c src/vector.h src/constants.h src/mesh.h src/mesh.c src/triangle.h src/triangle.c src/array.h src/array.c)
 set(CMAKE_C_STANDARD 99)
 
 set(SDL2_ROOT    "D:/libs/sdl2")
