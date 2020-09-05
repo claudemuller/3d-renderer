@@ -12,14 +12,14 @@ uint32_t bench_c = 0;
 
 void start_bench(int bench) {
 	if (bench == 1) {
-		startTime1 = (float) clock() / CLOCKS_PER_SEC;
+		startTime1 = (float)clock() / CLOCKS_PER_SEC;
 	} else {
-		startTime2 = (float) clock() / CLOCKS_PER_SEC;
+		startTime2 = (float)clock() / CLOCKS_PER_SEC;
 	}
 }
 
 void stop_bench(int bench) {
-	endTime = (float) clock() / CLOCKS_PER_SEC;
+	endTime = (float)clock() / CLOCKS_PER_SEC;
 	if (bench == 1) {
 		bench1 += endTime - startTime1;
 	} else {

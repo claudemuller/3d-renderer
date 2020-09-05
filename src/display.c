@@ -3,10 +3,10 @@
 int window_width = 800;
 int window_height = 600;
 
-SDL_Window *window = NULL;
-SDL_Renderer *renderer = NULL;
-SDL_Texture *colour_buffer_texture = NULL;
-uint32_t *colour_buffer = NULL;
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
+SDL_Texture* colour_buffer_texture = NULL;
+uint32_t* colour_buffer = NULL;
 
 bool init_window(void) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -56,7 +56,7 @@ void clear_colour_buffer(colour_t colour) {
 }
 
 void render_colour_buffer(void) {
-	SDL_UpdateTexture(colour_buffer_texture, NULL, colour_buffer, (int) (window_width * sizeof(uint32_t)));
+	SDL_UpdateTexture(colour_buffer_texture, NULL, colour_buffer, (int)(window_width * sizeof(uint32_t)));
 	SDL_RenderCopy(renderer, colour_buffer_texture, NULL, NULL);
 }
 

@@ -1,2 +1,2 @@
 # 3d-renderer
-A 3D Software Renderer with SDL2 and Good 'ol C
+A software 3D renderer with SDL2 and good 'ol C

@@ -12,7 +12,7 @@
 //vec2_t projected_points[N_POINTS];
 //vec3_t cube_rotation = {0, 0, 0};
 
-triangle_t *triangles_to_render = NULL;
+triangle_t* triangles_to_render = NULL;
 
 int fov_factor = 640;
 vec3_t camera_position = {0, 0, -5};
@@ -46,7 +46,7 @@ int main(void) {
 
 void setup(void) {
 	// Allocate the required bytes in memory for the colour buffer.
-	colour_buffer = (uint32_t*) malloc(sizeof(uint32_t) * window_width * window_height);
+	colour_buffer = (uint32_t*)malloc(sizeof(uint32_t) * window_width * window_height);
 
 	colour_buffer_texture = SDL_CreateTexture(
 			renderer,
@@ -71,7 +71,7 @@ void setup(void) {
 }
 
 vec2_t project(vec3_t point) {
-	return (vec2_t) {
+	return (vec2_t){
 			.x = fov_factor * point.x / point.z,
 			.y = fov_factor * point.y / point.z
 	};
@@ -104,7 +104,7 @@ void update(void) {
 		SDL_Delay(time_to_wait);
 	}
 //	printf("FPS: %d\n", last_frame_time - waited_for);
-	float delta_time = (float) (SDL_GetTicks() - last_frame_time) / 1000.0f;
+	float delta_time = (float)(SDL_GetTicks() - last_frame_time) / 1000.0f;
 	// Clamp deltaTime to a maximum value
 //	delta_time = delta_time > 0.05f ? 0.05f : delta_time;
 	// Sets the new ticks fo the current frame to be used in the next pass
@@ -199,7 +199,7 @@ void render(void) {
 				triangle.points[1].x, triangle.points[1].y,
 				triangle.points[2].x, triangle.points[2].y,
 				PINK
-				);
+		);
 	}
 
 	// Clear the array of triangles to render every frame loop.
