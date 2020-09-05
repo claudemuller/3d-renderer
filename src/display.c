@@ -44,7 +44,7 @@ bool init_window(void) {
 	return true;
 }
 
-void clear_colour_buffer(uint32_t colour) {
+void clear_colour_buffer(colour_t colour) {
 	// y is the row.
 	for (int y = 0; y < window_height; y++) {
 		// x is the col.
@@ -70,19 +70,39 @@ void draw_grid(void) {
 	}
 }
 
-void draw_pixel(int x, int y, uint32_t colour) {
+void draw_pixel(int x, int y, colour_t colour) {
 	if (x > 0 && x < window_width && y > 0 && y < window_height) {
 		colour_buffer[(window_width * y) + x] = colour;
 	}
 }
 
-void draw_fill_rect(int x, int y, int width, int height, uint32_t colour) {
+void draw_fill_rect(int x, int y, int width, int height, colour_t colour) {
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			int current_x = x + i;
 			int current_y = y + j;
 			draw_pixel(current_x, current_y, colour);
 		}
+	}
+}
+
+void draw_line(int x0, int y0, int x1, int y1, colour_t colour) {
+	int delta_x = x1 - x0;
+	int delta_y = y1 - y0;
+
+	int longest_side = abs(delta_x) >= abs(delta_y) ? abs(delta_x) : abs(delta_y);
+
+	float x_inc = delta_x / (float)longest_side;
+	float y_inc = delta_y / (float)longest_side;
+
+	float current_x = x0;
+	float current_y = y0;
+
+	for (int i = 0; i < longest_side; i++) {
+		draw_pixel(round(current_x), round(current_y), colour);
+
+		current_x += x_inc;
+		current_y += y_inc;
 	}
 }
 

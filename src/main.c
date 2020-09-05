@@ -105,7 +105,7 @@ void update(void) {
 //	printf("FPS: %d\n", last_frame_time - waited_for);
 	float delta_time = (float) (SDL_GetTicks() - last_frame_time) / 1000.0f;
 	// Clamp deltaTime to a maximum value
-	delta_time = delta_time > 0.05f ? 0.05f : delta_time;
+//	delta_time = delta_time > 0.05f ? 0.05f : delta_time;
 	// Sets the new ticks fo the current frame to be used in the next pass
 	last_frame_time = SDL_GetTicks();
 
@@ -181,12 +181,14 @@ void render(void) {
 //	}
 
 	// Loop over projected triangles and render them.
-	for (int i = 0; i < N_MESH_FACES; i++) {
-		triangle_t triangle = triangles_to_render[i];
-		draw_fill_rect(triangle.points[0].x, triangle.points[0].y, 3, 3, PINK);
-		draw_fill_rect(triangle.points[1].x, triangle.points[1].y, 3, 3, PINK);
-		draw_fill_rect(triangle.points[2].x, triangle.points[2].y, 3, 3, PINK);
-	}
+//	for (int i = 0; i < N_MESH_FACES; i++) {
+//		triangle_t triangle = triangles_to_render[i];
+//		draw_fill_rect(triangle.points[0].x, triangle.points[0].y, 3, 3, PINK);
+//		draw_fill_rect(triangle.points[1].x, triangle.points[1].y, 3, 3, PINK);
+//		draw_fill_rect(triangle.points[2].x, triangle.points[2].y, 3, 3, PINK);
+//	}
+
+	draw_line(100, 200, 300, 50, PINK);
 
 	render_colour_buffer();
 	clear_colour_buffer(BLACK);

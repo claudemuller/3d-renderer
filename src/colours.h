@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+typedef uint32_t colour_t ;
+
 extern const uint32_t BLACK;
 extern const uint32_t DARK_GREY;
 extern const uint32_t PINK;

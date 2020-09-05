@@ -23,13 +23,15 @@ bool init_window(void);
 
 void render_colour_buffer(void);
 
-void clear_colour_buffer(uint32_t colour);
+void clear_colour_buffer(colour_t colour);
 
 void draw_grid(void);
 
-void draw_pixel(int x, int y, uint32_t colour);
+void draw_pixel(int x, int y, colour_t colour);
 
-void draw_fill_rect(int x, int y, int width, int height, uint32_t colour);
+void draw_fill_rect(int x, int y, int width, int height, colour_t colour);
+
+void draw_line(int x0, int y0, int x1, int y1, colour_t colour);
 
 void cleanup(void);
 
