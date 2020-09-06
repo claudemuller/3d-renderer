@@ -67,7 +67,9 @@ void setup(void) {
 //	}
 
 	// Load the cube values into the mesh data structure.
-	load_cube_mesh_data();
+	//load_cube_mesh_data();
+
+	load_obj_file_data("./assets/crab.obj");
 }
 
 vec2_t project(vec3_t point) {

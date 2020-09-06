@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 project(3drenderer C)
 
-set(SOURCE_FILES src/main.c
+set(SOURCE_FILES src/main.c src/constants.h
         src/display.c src/display.h
         src/colours.h src/colours.c
         src/benchmark.h src/benchmark.c
-        src/vector.c src/vector.h src/constants.h src/mesh.h src/mesh.c src/triangle.h src/triangle.c src/array.h src/array.c)
+        src/vector.c src/vector.h
+        src/mesh.h src/mesh.c
+        src/triangle.h src/triangle.c
+        src/array.h src/array.c src/file.c)
 set(CMAKE_C_STANDARD 99)
 
 set(SDL2_ROOT    "D:/libs/sdl2")
